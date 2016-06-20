@@ -1,0 +1,18 @@
+To use the Common Lisp wrapper package cl-lemon around the 
+LEMON graph library you need a shared library version of lemon.
+
+If you have one on your system it should be found by configure; otherwise
+build one from the sources distributed in lib:
+
+	$ cd lib
+	$ cd build
+	$ cmake -DBUILD_SHARED_LIBS=TRUE -DCMAKE_BUILD_TYPE=Release ..
+	$ make
+	$ make check
+
+Then you should have a shared library called libemon.so or libemon.dylib in lib/build/lemon/
+
+Consider doing the build in the toplevel using
+	 ./configure CC=clang CXX=clang++ CFLAGS="-O3" CXXFLAGS="-O3"
+or similar optimizing flags to make the compiler generate reasonable code for the small
+trampoline routines that make up our lemon-api wrappers.
