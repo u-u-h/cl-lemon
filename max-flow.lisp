@@ -70,7 +70,7 @@
 	   (lemon-dst (svref lemon-nodes (- (length lemon-nodes) 1)))
 	   (lemon-flow-computation (lmn-create-flow-computation
 				    g lemon-capacities lemon-src lemon-dst))
-	   (foreign-interdiction-array (cffi:foreign-array-alloc
+	   (foreign-interdiction-array (cffi::foreign-array-alloc
 					(make-array
 					 (length interdictable-arcs)
 					 :initial-element (cffi:null-pointer))
@@ -101,7 +101,7 @@
 	(tg:finalize
 	 res
 	 #'(lambda ()
-	     (cffi:foreign-array-free foreign-interdiction-array)
+	     (cffi::foreign-array-free foreign-interdiction-array)
 	     (free-lmn-flow-computation lemon-flow-computation)
 	     (loop :for e :across lemon-arcs
 		:when (and e (not (cffi:null-pointer-p e)))
