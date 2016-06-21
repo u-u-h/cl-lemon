@@ -188,7 +188,8 @@ INTERDICTIONS specifies the arcs to be interdicted.
 	     (incf num-interdicted)))
     (lmn-run-flow-computation (get-lemon-flow-computation instance)
 			      num-interdicted
-			      interdiction-array)))
+			      interdiction-array)
+    (values)))
 
 
 (defun random-outage-test (instance)

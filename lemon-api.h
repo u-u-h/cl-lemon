@@ -145,11 +145,20 @@ extern "C" {
   /** compute max flow, setting capacities for DISABLED_ARCS temporarily
       to 0
       DISABLED_ARCS must habe #arcs entries or be NULL.
+      Result is not returned (to avoid overhead of allocating a double on the caller side
+      if not needed) but stored in C and can be retrieved by lmn_flow_computation_get_last_val.
   */
-  double
+  void
   lmn_run_flow_computation(struct lmn_flow_computation *c,
                            int num_disabled,
                            lmn_arc **disabled_arcs);
+
+  double
+  lmn_flow_computation_get_last_val(struct lmn_flow_computation *c);
+
+  /* check last value against VAL. Return negative for <, 0 for =, positive for > */
+  int
+  lmn_flow_computation_flow_cmp(struct lmn_flow_computation *c, double val);
   
 
 #ifdef __cplusplus

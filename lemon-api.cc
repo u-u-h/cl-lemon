@@ -43,7 +43,9 @@ struct lmn_flow_computation {
   lemon::Preflow<lemon::SmartDigraph> *preflow;
   lemon::SmartDigraph::ArcMap<int> *orig_capacities;
   // preallocated and reused when killing some arcs
-  lemon::SmartDigraph::ArcMap<int> *tmp_capacities; 
+  lemon::SmartDigraph::ArcMap<int> *tmp_capacities;
+  // last value
+  double val;
 };
 
 /* ctors */
@@ -259,9 +261,6 @@ lmn_arc_get_target(struct lmn_digraph *g, struct lmn_arc *e)
 struct lmn_digraph*
 lmn_digraph_create() {
   struct lmn_digraph *tmp = new_lmn_digraph(new lemon::SmartDigraph());
-  std::cout << "created graph " << (void*)tmp << ", containing " << tmp->g
-            << "\n" <<std::endl;
-
   return tmp;
 }
 
@@ -350,7 +349,7 @@ free_lmn_flow_computation(struct lmn_flow_computation *c)
 }
       
 
-double
+void
 lmn_run_flow_computation(struct lmn_flow_computation *c,
                          int num_disabled,
                          lmn_arc **disabled_arcs)
@@ -363,11 +362,32 @@ lmn_run_flow_computation(struct lmn_flow_computation *c,
   // run init and phase 1 -- we only need the flow value, not the flow itself
   c->preflow->init();
   c->preflow->startFirstPhase();
-  double res = c->preflow->flowValue();
+  c->val = c->preflow->flowValue();
   // reset capacity invariant
   for(int i=0; i<num_disabled; i++) {
     c->tmp_capacities->set(disabled_arcs[i]->e,
                            (*c->orig_capacities)[disabled_arcs[i]->e]);
   }
-  return res;
+  return;
 }
+
+double
+lmn_flow_computation_get_last_val(struct lmn_flow_computation *c)
+{
+  return c->val;
+}
+
+int
+lmn_flow_computation_flow_cmp(struct lmn_flow_computation *c, double val)
+{
+  if(val< c->val)
+    return -1;
+  else {
+    if(val==c->val)
+      return 0;
+    else
+      return +1;
+  }
+}
+          
+        
