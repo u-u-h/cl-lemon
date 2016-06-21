@@ -29,6 +29,8 @@
     #:lmn-create-flow-computation
     #:lmn-flow-computation
     #:lmn-run-flow-computation
+    #:lmn-flow-computation-get-last-val
+    #:lmn-flow-computation-flow-cmp
     #:free-lmn-flow-computation
     #:free-lmn-digraph
     #:free-lmn-node
